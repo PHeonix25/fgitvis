@@ -7,7 +7,7 @@ open Fake
 open Fake.Git
 
 let repo =     
-    let userInput = UserInputHelper.getUserInput "Please enter a path to a Git repo: "
+    let userInput = UserInputHelper.getUserInput "Please enter a path to a Git repo (or use `.` for this repo): "
     if (String.IsNullOrWhiteSpace userInput) || not (Directory.Exists userInput) then
         failwith "The provided input was not a valid path to a directory."
     userInput
