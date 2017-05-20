@@ -1,6 +1,4 @@
-﻿open System
-open Fake.Git
-open fgitvis
+﻿open fgitvis
 open FSharp.Charting
 open System.Windows.Forms
 
