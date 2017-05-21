@@ -21,16 +21,17 @@ let main argv =
     printfn ""
     
     let reportChosen = UserInput.requestMenuItem();
-    printfn "You've chosen well, we'll calculate the '%s' report now." (fst reportChosen)
+    printfn "You've chosen well, we'll calculate the '%s' report now." reportChosen.Description
 
     let fileLimit = UserInput.requestFileLimit    
     
+    let applyLimit = (fun xs -> if fileLimit = 0 then xs else Seq.truncate fileLimit xs)
     let showChart (chart: ChartTypes.GenericChart) = Application.Run(chart.ShowChart())
     
     // Step through our menu declarations and pull apart the operations to run
-    (fst (snd reportChosen))
-    |> (fun xs -> if fileLimit = 0 then xs else Seq.truncate fileLimit xs)
-    |> snd (snd reportChosen)
+    reportChosen.Operation
+    |> applyLimit
+    |> reportChosen.Chart
     |> showChart
 
     printfn ""

@@ -60,6 +60,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="GitOperations.fs" />
     <Compile Include="ChartBuilders.fs" />
+    <Compile Include="MenuOptions.fs" />
     <Compile Include="UserInput.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
