@@ -24,8 +24,11 @@ let main argv =
     printfn "You've chosen well, we'll calculate the '%s' report now." reportChosen.Description
 
     let fileLimit = UserInput.requestFileLimit    
-    
-    let applyLimit = (fun xs -> if fileLimit = 0 then xs else Seq.truncate fileLimit xs)
+    let applyLimit = 
+      match fileLimit with
+      | Some limit -> Seq.truncate limit
+      | None -> id
+
     let showChart (chart: ChartTypes.GenericChart) = Application.Run(chart.ShowChart())
     
     // Step through our menu declarations and pull apart the operations to run
