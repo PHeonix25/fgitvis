@@ -29,6 +29,6 @@ let requestMenuItem () =
 let requestFileLimit =
     let userInput = UserInputHelper.getUserInput "Please enter a numeric limit to the number of files we should graph: "
     let success, limit = Int32.TryParse(userInput)
-    if (not success) || limit < 0 then
-        failwith "Limit must be a positive integer (or 0 if you want to show all files)."
-    limit;
+    if success && limit > 0 
+    then Some limit
+    else None
