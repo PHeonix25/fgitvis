@@ -6,7 +6,7 @@ open FSharp.Charting
 type MenuOption = { 
     Option: string; 
     Description: string; 
-    Operation: seq<string * int>; 
+    Operation: string -> seq<string * int>; 
     Chart: (seq<string * int>) -> ChartTypes.GenericChart; 
 }
 

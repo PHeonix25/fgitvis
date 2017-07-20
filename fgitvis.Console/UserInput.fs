@@ -2,7 +2,14 @@
 module fgitvis.UserInput
 
 open System
+open System.IO
 open Fake
+
+let requestRepo () =     
+    let userInput = UserInputHelper.getUserInput "Please enter a path to a Git repo (or use `.` for this repo): "
+    if (String.IsNullOrWhiteSpace userInput) || not (Directory.Exists userInput) 
+    then None
+    else Some userInput
 
 let requestMenuItem () =
     printfn ""
@@ -13,20 +20,13 @@ let requestMenuItem () =
     printfn "";
 
     let userInput = UserInputHelper.getUserInput "Please choose a menu item: "
-    if (String.IsNullOrWhiteSpace userInput) then
-        failwith "You need to choose a valid menu option."
     
     let inputMatchesMenu input (menu: MenuOption) = 
         String.Equals(input, menu.Option, StringComparison.CurrentCultureIgnoreCase)
 
-    let result = 
-        match List.tryFind (inputMatchesMenu userInput) menuOptions with
-        | None -> failwith "Sorry, please choose one of the character prefixes for your required report."
-        | Some result -> result
-    
-    result;
+    List.tryFind (inputMatchesMenu userInput) menuOptions
 
-let requestFileLimit =
+let requestFileLimit () =
     let userInput = UserInputHelper.getUserInput "Please enter a numeric limit to the number of files we should graph: "
     let success, limit = Int32.TryParse(userInput)
     if success && limit > 0 

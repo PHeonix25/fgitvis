@@ -2,27 +2,20 @@
 module fgitvis.GitOperations
 
 open System
-open System.IO
 open Fake
 open Fake.Git
 
-let repo =     
-    let userInput = UserInputHelper.getUserInput "Please enter a path to a Git repo (or use `.` for this repo): "
-    if (String.IsNullOrWhiteSpace userInput) || not (Directory.Exists userInput) then
-        failwith "The provided input was not a valid path to a directory."
-    userInput
-
 // Set up the 'git' command - thanks FAKE
-let internal gitWrapper cmd = CommandHelper.getGitResult repo cmd
-let internal git command = Printf.kprintf gitWrapper command
+let internal gitWrapper = CommandHelper.getGitResult
+let internal git repo = Printf.kprintf (gitWrapper repo)
 
 // TODO: Add additional git commands in here... Anything that'll come in handy
-let internal getCommits = git "rev-list HEAD"
-let internal getFilesInCommit commit = git "diff-tree --no-commit-id --name-only -r %s" commit
+let internal getCommits repo = git repo "rev-list HEAD"
+let internal getFilesInCommit repo = git repo "diff-tree --no-commit-id --name-only -r %s"
 
-let getFilesByCommitCount = 
-    getCommits 
-    |> Seq.collect getFilesInCommit 
+let getFilesByCommitCount repo  = 
+    getCommits repo
+    |> Seq.collect (getFilesInCommit repo)
     |> Seq.countBy id 
     |> Seq.sortByDescending snd
 

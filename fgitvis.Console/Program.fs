@@ -19,11 +19,18 @@ let main argv =
     printfn " *                                                                         * "
     printfn " *************************************************************************** "
     printfn ""
+
+    let chooseInput f =
+      Seq.initInfinite id
+      |> Seq.choose (fun _ -> f())
+      |> Seq.head
+
+    let repoChosen = chooseInput UserInput.requestRepo
+    let reportChosen = chooseInput UserInput.requestMenuItem
     
-    let reportChosen = UserInput.requestMenuItem();
     printfn "You've chosen well, we'll calculate the '%s' report now." reportChosen.Description
 
-    let fileLimit = UserInput.requestFileLimit    
+    let fileLimit = UserInput.requestFileLimit ()
     let applyLimit = 
       match fileLimit with
       | Some limit -> Seq.truncate limit
@@ -32,7 +39,7 @@ let main argv =
     let showChart (chart: ChartTypes.GenericChart) = Application.Run(chart.ShowChart())
     
     // Step through our menu declarations and pull apart the operations to run
-    reportChosen.Operation
+    reportChosen.Operation repoChosen
     |> applyLimit
     |> reportChosen.Chart
     |> showChart
